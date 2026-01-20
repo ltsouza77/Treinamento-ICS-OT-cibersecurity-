@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinamento Avançado ICS/OT Cybersecurity</title>
+    <style>
+        :root { --primary: #00ff95; --bg: #0d1117; --card: #161b22; --text: #c9d1d9; --accent: #58a6ff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        header { border-bottom: 2px solid var(--primary); padding: 20px 0; text-align: center; margin-bottom: 30px; }
+        h1 { color: var(--primary); margin: 0; font-size: 2em; text-transform: uppercase; }
+        h2 { color: var(--accent); border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-top: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 10px; border: 1px solid #30363d; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .bash { background: #000; color: #a6e22e; padding: 15px; border-radius: 5px; font-family: 'Consolas', monospace; overflow-x: auto; margin: 15px 0; border-left: 4px solid var(--primary); }
+        .info-box { background: rgba(88, 166, 255, 0.1); border: 1px solid var(--accent); padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .highlight { color: var(--primary); font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--card); }
+        th, td { padding: 12px; border: 1px solid #30363d; text-align: left; }
+        th { background: #21262d; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🔐 Guia de Operações ICS/OT & Cybersecurity</h1>
+        <p>Monitoramento de Redes Industriais com Python e Tcpdump</p>
+    </header>
+
+    <h2>1. Como os Códigos se Integram</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>🏭 O Lado do Processo (OT)</h3>
+            <p><strong>Script:</strong> <code>servidor09_modbus.py</code></p>
+            <p>Cria um servidor Modbus que "escuta" requisições. Ele simula o hardware que um técnico de manutenção acessaria no chão de abril.</p>
+            <p><span class="highlight">Tecnologia:</span> Registradores Holding (HR) via Pymodbus.</p>
+        </div>
+        <div class="card">
+            <h3>🧠 O Lado da Inteligência (IT/Cyber)</h3>
+            <p><strong>Script:</strong> <code>clientev77v3_all.py</code></p>
+            <p>O cliente conecta no servidor, extrai os dados e os expõe em uma <strong>Interface Web</strong>. Ele também vigia anomalias usando lógica híbrida.</p>
+            <p><span class="highlight">Tecnologia:</span> Flask (Web), Requests (API), fpdf2 (Relatórios).</p>
+        </div>
+    </div>
+
+    <h2>2. Execução e Acesso via Web Browser</h2>
+    <div class="info-box">
+        <strong>📍 Entendendo o Endereçamento:</strong><br>
+        • <strong>Localhost (127.0.0.1):</strong> Quando você acessa no próprio aparelho onde o código roda.<br>
+        • <strong>IP Local (Ex: 192.168.1.15):</strong> Para acessar de outro celular ou PC na mesma rede Wi-Fi.
+    </div>
+
+    <h3>Passo 1: Descobrir seu IP no Termux/Linux</h3>
+    <div class="bash">ifconfig  # Procure por 'inet' em wlan0 ou eth0</div>
+
+    <h3>Passo 2: Rodar e Acessar</h3>
+    <ol>
+        <li>Inicie o servidor: <code>python servidor09_modbus.py</code></li>
+        <li>Inicie o cliente: <code>python clientev77v3_all.py</code></li>
+        <li>Abra o navegador e digite: 
+            <br><code>http://localhost:5000</code> (No próprio aparelho)
+            <br><code>http://SEU_IP_AQUI:5000</code> (De outro aparelho na rede)
+        </li>
+    </ol>
+
+    <h2>3. Detalhamento ICS com Tcpdump (Comandos de Elite)</h2>
+    <p>O <code>tcpdump</code> é a sua ferramenta de perícia industrial. Ele revela o que o Modbus está enviando sem criptografia.</p>
+
+    <table>
+        <tr>
+            <th>Comando</th>
+            <th>O que faz (Análise ICS)</th>
+            <th>Por que usar?</th>
+        </tr>
+        <tr>
+            <td><code>tcpdump -i lo port 502 -X</code></td>
+            <td>Mostra o conteúdo Hexadecimal e ASCII do pacote Modbus.</td>
+            <td>Para ver se os valores dos sensores estão vindo corretos no payload.</td>
+        </tr>
+        <tr>
+            <td><code>tcpdump -i any -n</code></td>
+            <td>Captura em todas as interfaces sem resolver nomes.</td>
+            <td>Performance máxima para não perder pacotes em redes rápidas.</td>
+        </tr>
+        <tr>
+            <td><code>tcpdump src 192.168.x.x</code></td>
+            <td>Filtra apenas pacotes vindo de um IP específico (ex: um PLC suspeito).</td>
+            <td>Isolar tráfego de um dispositivo que pode estar sob ataque.</td>
+        </tr>
+        <tr>
+            <td><code>tcpdump -w log.pcap</code></td>
+            <td>Salva a captura em arquivo bruto.</td>
+            <td>Para análise profunda no Wireshark ou envio para perícia.</td>
+        </tr>
+    </table>
+
+    
+
+    <h2>4. Checklist de Cybersecurity OT</h2>
+    <div class="card">
+        <ul>
+            <li><strong>Verificação de Protocolo:</strong> O Modbus TCP não tem senha. Use o <code>tcpdump</code> para confirmar que qualquer um na rede pode ler seus dados.</li>
+            <li><strong>Análise Forense:</strong> Se o <code>clientev77</code> detectar uma temperatura de 1000°C (anomalia), abra o arquivo <code>.pcap</code> e veja qual IP enviou o comando de escrita (Write Single Register).</li>
+            <li><strong>Segurança da API:</strong> Note que o Flask roda por padrão em modo debug. Em produção industrial, isso é uma vulnerabilidade grave.</li>
+        </ul>
+    </div>
+
+    
+
+    <footer style="text-align: center; padding: 40px; font-size: 0.8em; opacity: 0.5;">
+        Gerado para Práticas de Automação e Cibersegurança Industrial | 2026
+    </footer>
+</div>
+
+</body>
+</html>
